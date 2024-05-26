@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.UranAi" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/soft_blue</item>
+        <item name="colorPrimaryDark">@color/soft_blue</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="Theme.UranAi" parent="Base.Theme.UranAi" />
+    <style name="ThemeOverlay.SearchView" parent="">
+        <item name="android:editTextColor">@color/gray</item>
+        <item name="android:textColorHint">#8F8787</item>
+    </style>
+</resources>
