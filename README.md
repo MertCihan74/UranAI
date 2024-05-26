@@ -1,6 +1,6 @@
-# AI-Powered Fortune-Telling Application
+# AI-Powered Fortune-Telling Application Uran AI
 
-Welcome to the AI-Powered Fortune-Telling Application! This application is developed using Kotlin and leverages artificial intelligence to provide users with personalized fortune readings. 
+Welcome to the Uran AI! This application is developed using Kotlin and leverages artificial intelligence to provide users with personalized fortune readings. 
 
 ## Features
 
