@@ -316,8 +316,8 @@ class FortuneActivity : AppCompatActivity() {
     private fun takePicture(requestCode: Int) {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
             try {
-                intent.putExtra("android.intent.extras.CAMERA_FACING", 1)
-                intent.putExtra("android.intent.extras.LENS_FACING_FRONT", 0)
+                intent.putExtra("android.intent.extras.CAMERA_FACING", 0)
+                intent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1)
                 intent.putExtra("android.intent.extra.QUALITY", 100)
                 startActivityForResult(intent, requestCode)
             } catch (e: Exception) {
