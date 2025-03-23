@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#66000000"
-                android:text="Geçmiş Fallarınız Burada Gözükecektir"
+                android:text="Your Past Fortunes Will Appear Here"
                 android:textColor="@android:color/white"
                 android:fontFamily="@font/interfont"
                 android:textSize="18sp"

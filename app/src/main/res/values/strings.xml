@@ -1,6 +1,118 @@
 <resources>
-    <string name="app_name">Uran AI</string>
+    <string name="app_name">Coffee Fortune Telling</string>
     <string name="nav_open">Open Navigation Drawer</string>
     <string name="nav_close">Close Navigation Drawer</string>
     <string name="cekilen_fotograf">Çekilen fotoğraf</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="marital_status_array">
+        <item>Single</item>
+        <item>Married</item>
+        <item>Divorced</item>
+        <item>Widowed</item>
+    </string-array>
+    <string-array name="zodiac_array">
+        <item>Aries</item>
+        <item>Taurus</item>
+        <item>Gemini</item>
+        <item>Cancer</item>
+        <item>Leo</item>
+        <item>Virgo</item>
+        <item>Libra</item>
+        <item>Scorpio</item>
+        <item>Sagittarius</item>
+        <item>Capricorn</item>
+        <item>Aquarius</item>
+        <item>Pisces</item>
+    </string-array>
+    <string-array name="city_array">
+        <item>Adana</item>
+        <item>Adiyaman</item>
+        <item>Afyonkarahisar</item>
+        <item>Agri</item>
+        <item>Aksaray</item>
+        <item>Amasya</item>
+        <item>Ankara</item>
+        <item>Antalya</item>
+        <item>Ardahan</item>
+        <item>Artvin</item>
+        <item>Aydin</item>
+        <item>Balikesir</item>
+        <item>Bartin</item>
+        <item>Batman</item>
+        <item>Bayburt</item>
+        <item>Bilecik</item>
+        <item>Bingol</item>
+        <item>Bitlis</item>
+        <item>Bolu</item>
+        <item>Burdur</item>
+        <item>Bursa</item>
+        <item>Canakkale</item>
+        <item>Cankiri</item>
+        <item>Corum</item>
+        <item>Denizli</item>
+        <item>Diyarbakir</item>
+        <item>Duzce</item>
+        <item>Edirne</item>
+        <item>Elazig</item>
+        <item>Erzincan</item>
+        <item>Erzurum</item>
+        <item>Eskisehir</item>
+        <item>Gaziantep</item>
+        <item>Giresun</item>
+        <item>Gumushane</item>
+        <item>Hakkari</item>
+        <item>Hatay</item>
+        <item>Igdir</item>
+        <item>Isparta</item>
+        <item>Istanbul</item>
+        <item>Izmir</item>
+        <item>Kahramanmaras</item>
+        <item>Karabuk</item>
+        <item>Karaman</item>
+        <item>Kars</item>
+        <item>Kastamonu</item>
+        <item>Kayseri</item>
+        <item>Kilis</item>
+        <item>Kirikkale</item>
+        <item>Kirklareli</item>
+        <item>Kirsehir</item>
+        <item>Kocaeli</item>
+        <item>Konya</item>
+        <item>Kutahya</item>
+        <item>Malatya</item>
+        <item>Manisa</item>
+        <item>Mardin</item>
+        <item>Mersin</item>
+        <item>Mugla</item>
+        <item>Mus</item>
+        <item>Nevsehir</item>
+        <item>Nigde</item>
+        <item>Ordu</item>
+        <item>Osmaniye</item>
+        <item>Rize</item>
+        <item>Sakarya</item>
+        <item>Samsun</item>
+        <item>Siirt</item>
+        <item>Sinop</item>
+        <item>Sivas</item>
+        <item>Sanliurfa</item>
+        <item>Sirnak</item>
+        <item>Tekirdag</item>
+        <item>Tokat</item>
+        <item>Trabzon</item>
+        <item>Tunceli</item>
+        <item>Usak</item>
+        <item>Van</item>
+        <item>Yalova</item>
+        <item>Yozgat</item>
+        <item>Zonguldak</item>
+    </string-array>
+    <string name="gender_prompt">Please select your gender</string>
+    <string name="zodiac_prompt">Please select your zodiac sign</string>
+    <string name="city_prompt">Please select your city</string>
+    <string name="marital_status_prompt">Please select your marital status</string>
 </resources>

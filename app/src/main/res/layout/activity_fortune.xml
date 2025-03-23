@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FortuneActivity">
+    tools:context=".FortuneActivity"
+    android:background="@drawable/fortune_bg_image">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="Kahve Falı"
+            app:title="Coffee Fortune"
             app:titleTextColor="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,7 +49,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Fincanın İç Kısmı"
+                        android:text="Cup Photo 1"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -66,7 +67,7 @@
                         android:id="@+id/captureButton1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="İç Kısım Fotoğrafı Çek"
+                        android:text="Take a Photo of the Cup"
                         app:icon="@drawable/ic_camera"
                         style="@style/Widget.MaterialComponents.Button"/>
 
@@ -91,7 +92,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Fincanın Dış Kısmı"
+                        android:text="Cup Photo 2"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -109,7 +110,7 @@
                         android:id="@+id/captureButton2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dış Kısım Fotoğrafı Çek"
+                        android:text="Take a Photo of the Cup"
                         app:icon="@drawable/ic_camera"
                         style="@style/Widget.MaterialComponents.Button"/>
 
@@ -122,7 +123,7 @@
                 android:id="@+id/analyzeButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Falı Analiz Et"
+                android:text="Analyze Fortune Telling"
                 android:enabled="false"
                 app:icon="@drawable/ic_analyze"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
@@ -144,7 +145,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Fal Yorumu"
+                        android:text="Fortune Telling Result"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:textStyle="bold"

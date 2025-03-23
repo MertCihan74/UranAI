@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    >
+    tools:context=".ProfileActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +37,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/profile" />
+                    app:srcCompat="@drawable/profile_photo_blank" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -47,11 +48,8 @@
                     android:shadowDx="0"
                     android:shadowDy="0"
                     android:shadowRadius="10"
-                    android:text="Mert Cihan Bayır"
-                    android:layout_marginTop="16dp"
                     android:textSize="25sp"
                     android:textStyle="bold"
-
                     app:layout_constraintEnd_toEndOf="@+id/imageView2"
                     app:layout_constraintStart_toStartOf="@+id/imageView2"
                     app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -61,7 +59,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray"
-                    android:text="mcbayir74@gmail.com"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView"
                     app:layout_constraintStart_toStartOf="@+id/textView"
@@ -112,6 +109,7 @@
                         android:paddingStart="20dp"
                         android:text="Personal Information"
                         android:textAlignment="viewStart" />
+
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/button4"
                         android:layout_width="match_parent"
@@ -129,6 +127,7 @@
                         android:paddingStart="20dp"
                         android:text="Notifications"
                         android:textAlignment="viewStart" />
+
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/button2"
                         android:layout_width="match_parent"
@@ -150,7 +149,6 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/backtomainmenu"
                         android:layout_width="match_parent"
-                        android:onClick="backMainPage"
                         android:layout_height="60dp"
                         style="@android:style/Widget.Button"
                         android:background="@drawable/container_bg"
@@ -160,7 +158,7 @@
                         android:text="Back to Main page"
                         android:textColor="#ffffff"
                         android:textStyle="bold"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

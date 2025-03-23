@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "URAN AI"
+rootProject.name = "Kahve Falı"
 include(":app")
  

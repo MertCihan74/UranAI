@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "911784089779",
-    "project_id": "uran-ai",
-    "storage_bucket": "uran-ai.appspot.com"
+    "project_number": "100037022850",
+    "project_id": "kahve-fali-9410f",
+    "storage_bucket": "kahve-fali-9410f.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:911784089779:android:65dee622b14e0fc5e1b8c6",
+        "mobilesdk_app_id": "1:100037022850:android:f216f54eb4a71eaa9b909b",
         "android_client_info": {
           "package_name": "com.sau.uranai"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBf_YBahImtpYwJcRpwhxVKhppCpHKIic4"
+          "current_key": "AIzaSyBAREi-2B_6dt84VqQpOajSPhqr2aOdiYw"
         }
       ],
       "services": {

@@ -34,6 +34,13 @@ import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.util.concurrent.TimeUnit
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
+import io.github.cdimascio.dotenv.Dotenv
 
 class FortuneActivity : AppCompatActivity() {
     companion object {
@@ -42,7 +49,7 @@ class FortuneActivity : AppCompatActivity() {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_IMAGE_CAPTURE_1 = 1
         private const val REQUEST_IMAGE_CAPTURE_2 = 2
-        private const val OPENAI_API_KEY = "your-api-key-here"
+        private const val OPENAI_API_KEY = ""
         private const val MODEL_PATH = "best_float32.tflite"
         private const val IMAGE_SIZE = 640
     }
@@ -51,8 +58,8 @@ class FortuneActivity : AppCompatActivity() {
     private var tflite: Interpreter? = null
     private var bitmap1: Bitmap? = null
     private var bitmap2: Bitmap? = null
-    private var isFirstImageTelveli = false
-    private var isSecondImageTelveli = false
+    private var isFirstImageGrounds = false
+    private var isSecondImageGrounds = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,42 +77,39 @@ class FortuneActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             Log.e(TAG, "onCreate error: ${e.message}", e)
-            showError("Uygulama başlatılamadı: ${e.message}")
+            showError("Application could not be started: ${e.message}")
         }
     }
 
     private fun initializeModel() {
         try {
             val modelPath = assetFilePath(this, MODEL_PATH)
-            Log.d(TAG, "Model yolu: $modelPath")
+            Log.d(TAG, "Model path: $modelPath")
 
             val modelFile = File(modelPath)
             if (!modelFile.exists()) {
-                throw Exception("Model dosyası bulunamadı: $modelPath")
+                throw Exception("Model file not found: $modelPath")
             }
-            Log.d(TAG, "Model dosya boyutu: ${modelFile.length()} bytes")
+            Log.d(TAG, "Model file size: ${modelFile.length()} bytes")
 
-            // TFLite modelini yükle
             val tfliteModel = loadModelFile(modelFile)
             val tfliteOptions = Interpreter.Options()
             tflite = Interpreter(tfliteModel, tfliteOptions)
 
-            Log.d(TAG, "TFLite model başarıyla yüklendi")
+            Log.d(TAG, "TFLite model loaded successfully")
 
-            // Test input ile modeli dene
             val testInput = ByteBuffer.allocateDirect(1 * IMAGE_SIZE * IMAGE_SIZE * 3 * 4)
                 .order(ByteOrder.nativeOrder())
 
-            // Çıktı şeklini [1, 6, 8400] olarak düzelt
             val testOutput = Array(1) { Array(6) { FloatArray(8400) } }
 
             tflite?.run(testInput, testOutput)
-            Log.d(TAG, "Test çıktısı boyutu: [1, 6, 8400]")
+            Log.d(TAG, "Test output size: [1, 6, 8400]")
 
         } catch (e: Exception) {
-            Log.e(TAG, "Model yükleme hatası: ${e.message}", e)
+            Log.e(TAG, "Model loading error: ${e.message}", e)
             e.printStackTrace()
-            showError("Model yüklenemedi: ${e.message}")
+            showError("Model could not be loaded: ${e.message}")
         }
     }
 
@@ -131,7 +135,7 @@ class FortuneActivity : AppCompatActivity() {
                 if (bitmap1 != null && bitmap2 != null) {
                     analyzeImages()
                 } else {
-                    showError("Lütfen önce fotoğrafları çekin")
+                    showError("Please take photos first")
                 }
             }
         }
@@ -140,40 +144,36 @@ class FortuneActivity : AppCompatActivity() {
     private fun analyzeImages() {
         try {
             showLoading(true)
-            binding.resultTextView.text = "Fotoğraflar analiz ediliyor..."
+            binding.resultTextView.text = "Analyzing photos..."
 
-            isFirstImageTelveli = analyzeWithTFLite(bitmap1!!)
-            Log.d(TAG, "İlk fotoğraf analiz sonucu: $isFirstImageTelveli")
+            isFirstImageGrounds = analyzeWithTFLite(bitmap1!!)
+            Log.d(TAG, "First photo analysis result: $isFirstImageGrounds")
 
-            isSecondImageTelveli = analyzeWithTFLite(bitmap2!!)
-            Log.d(TAG, "İkinci fotoğraf analiz sonucu: $isSecondImageTelveli")
+            isSecondImageGrounds = analyzeWithTFLite(bitmap2!!)
+            Log.d(TAG, "Second photo analysis result: $isSecondImageGrounds")
 
             checkResults()
 
         } catch (e: Exception) {
-            Log.e(TAG, "Analiz hatası: ${e.message}", e)
+            Log.e(TAG, "Analysis error: ${e.message}", e)
             showLoading(false)
-            showError("Analiz sırasında hata oluştu: ${e.message}")
+            showError("Error during analysis: ${e.message}")
         }
     }
 
     private fun analyzeWithTFLite(bitmap: Bitmap): Boolean {
         try {
             val inputBuffer = convertBitmapToByteBuffer(bitmap)
-            // Çıktı array'ini doğru boyutta oluştur
             val outputArray = Array(1) { Array(6) { FloatArray(8400) } }
 
-            // Modeli çalıştır
             tflite?.run(inputBuffer, outputArray)
 
-            // En yüksek güvenilirlik skorunu bul
             var maxConfidence = 0f
             var predictedClass = -1
 
-            // Her tespit için kontrol et
             for (i in 0 until 8400) {
-                val confidence = outputArray[0][4][i]  // confidence skoru
-                val classScore = outputArray[0][5][i]  // class skoru
+                val confidence = outputArray[0][4][i]
+                val classScore = outputArray[0][5][i]
 
                 if (confidence > maxConfidence) {
                     maxConfidence = confidence
@@ -181,14 +181,13 @@ class FortuneActivity : AppCompatActivity() {
                 }
             }
 
-            Log.d(TAG, "En yüksek güvenilirlik: $maxConfidence")
-            Log.d(TAG, "Tahmin edilen sınıf: ${if (predictedClass == 0) "Telveli" else "Telvesiz"}")
+            Log.d(TAG, "Highest confidence: $maxConfidence")
+            Log.d(TAG, "Predicted class: ${if (predictedClass == 0) "Has grounds" else "No grounds"}")
 
-            // Telveli sınıfı için karar ver
             return predictedClass == 0 && maxConfidence > 0.5f
 
         } catch (e: Exception) {
-            Log.e(TAG, "TFLite analiz hatası: ${e.message}", e)
+            Log.e(TAG, "TFLite analysis error: ${e.message}", e)
             return false
         }
     }
@@ -199,24 +198,23 @@ class FortuneActivity : AppCompatActivity() {
             .order(ByteOrder.nativeOrder())
 
         val intValues = IntArray(IMAGE_SIZE * IMAGE_SIZE)
-        // getPixels parametreleri düzeltildi
         resizedBitmap.getPixels(
-            intValues,        // pixel array
-            0,                // offset
-            IMAGE_SIZE,       // stride
-            0,                // x
-            0,                // y
-            IMAGE_SIZE,       // width
-            IMAGE_SIZE        // height
+            intValues,
+            0,
+            IMAGE_SIZE,
+            0,
+            0,
+            IMAGE_SIZE,
+            IMAGE_SIZE
         )
 
         var pixel = 0
         for (i in 0 until IMAGE_SIZE) {
             for (j in 0 until IMAGE_SIZE) {
                 val value = intValues[pixel++]
-                byteBuffer.putFloat(((value shr 16) and 0xFF) / 255.0f)  // Red
-                byteBuffer.putFloat(((value shr 8) and 0xFF) / 255.0f)   // Green
-                byteBuffer.putFloat((value and 0xFF) / 255.0f)           // Blue
+                byteBuffer.putFloat(((value shr 16) and 0xFF) / 255.0f)
+                byteBuffer.putFloat(((value shr 8) and 0xFF) / 255.0f)
+                byteBuffer.putFloat((value and 0xFF) / 255.0f)
             }
         }
 
@@ -225,89 +223,180 @@ class FortuneActivity : AppCompatActivity() {
 
     private fun getFortuneTelling() {
         try {
+            if (!isNetworkAvailable()) {
+                showError("Please check your internet connection")
+                return
+            }
+
+            Log.d(TAG, "Starting fortune telling process...")
             showLoading(true)
-            binding.resultTextView.text = "Fal yorumu alınıyor..."
-
-            val client = OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build()
-
-            val requestBody = JSONObject().apply {
-                put("model", "gpt-3.5-turbo")
-                put("messages", JSONArray().apply {
-                    put(JSONObject().apply {
-                        put("role", "system")
-                        put("content", """
-                            Sen deneyimli bir kahve falı uzmanısın. 
-                            Detaylı, olumlu ve umut verici yorumlar yaparsın. 
-                            Her yorumunda aşk, kariyer ve sağlık konularına değinirsin.
-                            Fincanın hem iç hem dış kısmını değerlendirirsin.
-                        """.trimIndent())
-                    })
-                    put(JSONObject().apply {
-                        put("role", "user")
-                        put("content", """
-                            Kahve fincanının hem iç hem dış kısmındaki telveleri görüyorum. 
-                            Lütfen fincanın her iki yönünü de değerlendirerek detaylı ve 
-                            olumlu bir fal yorumu yapar mısın?
-                        """.trimIndent())
-                    })
-                })
-                put("temperature", 0.7)
-                put("max_tokens", 1000)
-            }.toString()
-
-            val request = Request.Builder()
-                .url("https://api.openai.com/v1/chat/completions")
-                .addHeader("Authorization", "Bearer $OPENAI_API_KEY")
-                .addHeader("Content-Type", "application/json")
-                .post(requestBody.toRequestBody("application/json".toMediaType()))
-                .build()
+            binding.resultTextView.text = "Getting fortune reading..."
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val response = client.newCall(request).execute()
-                    val responseBody = response.body?.string()
+                    val userData = getUserDataFromFirebase()
 
                     withContext(Dispatchers.Main) {
-                        if (response.isSuccessful && responseBody != null) {
-                            val fortune = JSONObject(responseBody)
-                                .getJSONArray("choices")
-                                .getJSONObject(0)
-                                .getJSONObject("message")
-                                .getString("content")
+                        // Rest of the function remains the same
+                        val client = OkHttpClient.Builder()
+                            .connectTimeout(30, TimeUnit.SECONDS)
+                            .readTimeout(30, TimeUnit.SECONDS)
+                            .writeTimeout(30, TimeUnit.SECONDS)
+                            .build()
 
-                            showLoading(false)
-                            binding.resultTextView.text = fortune
-                        } else {
-                            throw Exception("API yanıt vermedi: ${response.code}")
+                        val requestBody = JSONObject().apply {
+                            put("model", "gpt-3.5-turbo")
+                            put("messages", JSONArray().apply {
+                                put(JSONObject().apply {
+                                    put("role", "system")
+                                    put("content", """
+                                    You are a professional coffee fortune teller. You make your readings according to these rules:
+
+                                    1. Your interpretations are always positive and hopeful.
+                                    2. You look at three main topics: Love, Career, and Health.
+                                    3. You write a separate paragraph for each topic.
+                                    4. Each paragraph contains 3-4 related and meaningful sentences.
+                                    5. Sentences complement each other and form a coherent whole.
+                                    6. You make your interpretations in English.
+                                    7. You only interpret the coffee grounds patterns.
+                                    8. Each paragraph starts with "Love:", "Career:", "Health:".
+                                    9. You leave one line space between paragraphs.
+                                    10. You only make paragraph transitions when changing topics.
+                                    11. Incorporate the user's personal information into your reading where relevant.
+                                    """.trimIndent())
+                                })
+                                put(JSONObject().apply {
+                                    put("role", "user")
+                                    put("content", """
+                                    I can see the coffee grounds patterns in the cup. 
+                                    Please evaluate the patterns and provide a detailed interpretation 
+                                    about love, career, and health. I expect a positive reading with 
+                                    3-4 sentences for each topic in separate paragraphs.
+                                    
+                                    Here is some information about me:
+                                    Name: ${userData.name}
+                                    Surname: ${userData.surname}
+                                    Gender: ${userData.gender}
+                                    Date of Birth: ${userData.dateOfBirth}
+                                    Zodiac Sign: ${userData.zodiacSign}
+                                    Birth City: ${userData.birthCity}
+                                    Occupation: ${userData.occupation}
+                                    Marital Status: ${userData.maritalStatus}
+                                    
+                                    Please incorporate this information into your reading where relevant.
+                                    """.trimIndent())
+                                })
+                            })
+                            put("temperature", 0.7)
+                            put("max_tokens", 1000)
+                        }
+
+                        val request = Request.Builder()
+                            .url("https://api.openai.com/v1/chat/completions")
+                            .addHeader("Authorization", "Bearer $OPENAI_API_KEY")
+                            .addHeader("Content-Type", "application/json")
+                            .post(requestBody.toString().toRequestBody("application/json".toMediaType()))
+                            .build()
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            try {
+                                val response = client.newCall(request).execute()
+                                val responseBody = response.body?.string()
+
+                                withContext(Dispatchers.Main) {
+                                    if (response.isSuccessful && responseBody != null) {
+                                        try {
+                                            val jsonResponse = JSONObject(responseBody)
+                                            val fortune = jsonResponse
+                                                .getJSONArray("choices")
+                                                .getJSONObject(0)
+                                                .getJSONObject("message")
+                                                .getString("content")
+
+                                            val formattedFortune = fortune.replace(". ", ".\n\n")
+
+                                            showLoading(false)
+                                            binding.resultTextView.text = formattedFortune
+                                        } catch (e: Exception) {
+                                            Log.e(TAG, "JSON parsing error", e)
+                                            showLoading(false)
+                                            showError("Could not process fortune reading: ${e.message}")
+                                        }
+                                    } else {
+                                        val errorMessage = when (response.code) {
+                                            401 -> "Invalid API key"
+                                            429 -> "Too many requests. Please wait."
+                                            500 -> "OpenAI server error"
+                                            else -> "API not responding (Code: ${response.code})"
+                                        }
+                                        showLoading(false)
+                                        showError(errorMessage)
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    showLoading(false)
+                                    when (e) {
+                                        is java.net.UnknownHostException ->
+                                            showError("Please check your internet connection")
+                                        is java.net.SocketTimeoutException ->
+                                            showError("Connection timed out. Please try again.")
+                                        else ->
+                                            showError("Could not get fortune reading: ${e.message}")
+                                    }
+                                }
+                            }
                         }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         showLoading(false)
-                        showError("Fal yorumu alınamadı: ${e.message}")
+                        showError("Could not retrieve user data: ${e.message}")
                     }
                 }
             }
         } catch (e: Exception) {
             showLoading(false)
-            showError("Fal yorumu başlatılamadı: ${e.message}")
+            showError("Could not start fortune telling: ${e.message}")
+        }
+    }
+    private suspend fun getUserDataFromFirebase(): UserData {
+        try {
+            // Get the current user
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user == null) {
+                throw Exception("No user is currently signed in")
+            }
+
+            // Retrieve user data from Firestore
+            val userData = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(user.uid)
+                .get()
+                .await()
+                .toObject(UserData::class.java)
+
+            if (userData == null) {
+                throw Exception("User data not found in Firestore")
+            }
+
+            return userData
+        } catch (e: Exception) {
+            Log.e(TAG, "Error retrieving user data from Firebase: ${e.message}", e)
+            throw e
         }
     }
 
     private fun checkResults() {
-        if (isFirstImageTelveli && isSecondImageTelveli) {
+        if (isFirstImageGrounds && isSecondImageGrounds) {
             getFortuneTelling()
         } else {
             showLoading(false)
             val message = buildString {
-                append("Fotoğraflarda yeterli telve tespit edilemedi.\n\n")
-                append("İç kısım: ${if (isFirstImageTelveli) "Telveli ✓" else "Telvesiz ✗"}\n")
-                append("Dış kısım: ${if (isSecondImageTelveli) "Telveli ✓" else "Telvesiz ✗"}\n\n")
-                append("Lütfen fincanın iç ve dış kısmında telve olan fotoğraflar çekin.")
+                append("Not enough coffee grounds detected in photos.\n\n")
+                append("1st Photo: ${if (isFirstImageGrounds) "Has grounds ✓" else "No grounds ✗"}\n")
+                append("2nd Photo: ${if (isSecondImageGrounds) "Has grounds ✓" else "No grounds ✗"}\n\n")
+                append("Please take photos with coffee grounds.")
             }
             binding.resultTextView.text = message
         }
@@ -321,8 +410,8 @@ class FortuneActivity : AppCompatActivity() {
                 intent.putExtra("android.intent.extra.QUALITY", 100)
                 startActivityForResult(intent, requestCode)
             } catch (e: Exception) {
-                Log.e(TAG, "Kamera başlatılamadı: ${e.message}", e)
-                showError("Kamera başlatılamadı: ${e.message}")
+                Log.e(TAG, "Could not start camera: ${e.message}", e)
+                showError("Could not start camera: ${e.message}")
             }
         }
     }
@@ -345,6 +434,25 @@ class FortuneActivity : AppCompatActivity() {
         }
 
         return file.absolutePath
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -386,7 +494,7 @@ class FortuneActivity : AppCompatActivity() {
             if (allPermissionsGranted()) {
                 setupUI()
             } else {
-                showError("Kamera izni olmadan uygulama çalışamaz")
+                showError("Camera permission is required for the app to work")
                 finish()
             }
         }
@@ -409,4 +517,14 @@ class FortuneActivity : AppCompatActivity() {
         bitmap1 = null
         bitmap2 = null
     }
+    data class UserData(
+        val name: String="",
+        val surname: String="",
+        val gender: String="",
+        val dateOfBirth: String="",
+        val zodiacSign: String="",
+        val birthCity: String="",
+        val occupation: String="",
+        val maritalStatus: String=""
+    )
 }
