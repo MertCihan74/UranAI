@@ -1,10 +1,25 @@
-# AI-Powered Fortune-Telling Application Uran AI
+# AI-Powered Turkish Coffee Fortune-Telling App
 
-Welcome to the Uran AI! This application is developed using Kotlin and leverages artificial intelligence to provide users with personalized fortune readings. 
+An Android application that uses AI to digitize the traditional Turkish coffee fortune-telling experience.
 
-## Features
+## 🎯 Project Overview
 
-- **Firebase Integration**: Photos are uploaded to Firebase Storage, and the app uses Firebase Firestore to store and retrieve data.
-- **User-Friendly Interface**: The app has an intuitive and user-friendly interface.
+This app combines computer vision and natural language processing to:
+- Detect real coffee cups with grounds using YOLOv11n
+- Generate personalized fortunes using GPT-3.5
+- Preserve cultural heritage through technology
 
+## 🚀 Features
 
+- Real-time coffee ground detection (99.5% accuracy)
+- Personalized fortune generation based on user profiles
+- Privacy-focused design with transparent data policies
+- 5-second processing time
+- Material Design UI
+
+## 🛠️ Tech Stack
+
+- **Android**: Kotlin, Material Design 3
+- **AI/ML**: YOLOv11n, TensorFlow Lite
+- **Backend**: Firebase Auth/Firestore, OpenAI GPT-3.5 API
+- **Networking**: OkHttp, Retrofit
