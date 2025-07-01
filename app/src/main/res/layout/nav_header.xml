@@ -2,18 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:gravity="top"
+    android:layout_height="176dp"
+    android:gravity="bottom"
     android:padding="16dp"
-    android:background="@color/gray"
+    android:background="@color/soft_blue"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:layout_width="80dp"
-        android:layout_height="60dp"
-        android:layout_gravity="start"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="-10dp"
-        android:scaleType="fitXY"/>
+        android:layout_height="80dp"
+        android:src="@drawable/uranai"
+        android:contentDescription="@string/app_name"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Coffee Fortune Telling"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/nav_header_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:textSize="14sp" />
 
 </LinearLayout>

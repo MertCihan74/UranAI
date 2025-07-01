@@ -16,6 +16,7 @@
     <color name="gezio_color">#344260</color>
     <color name="acıkgri">#BAFFFFFF</color>
     <color name="background_color_dark_mode">#333333</color>
+    <color name="soft_blue_light">#A5D3FF</color>
 
 
 </resources>

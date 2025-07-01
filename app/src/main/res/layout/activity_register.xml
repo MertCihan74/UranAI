@@ -133,6 +133,25 @@
             android:background="@drawable/edit_text_background"
             android:padding="16dp" />
 
+        <CheckBox
+            android:id="@+id/checkboxDataConsent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I consent to the processing of my personal data and its transmission to the GPT API for generating fortune readings."
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/textPrivacyPolicy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I have read and agree to the Privacy Policy and Terms of Service."
+            android:textColor="@color/soft_blue"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical" />
+
         <Button
             android:id="@+id/registerButton"
             android:layout_width="match_parent"

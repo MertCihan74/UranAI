@@ -49,7 +49,7 @@ class FortuneActivity : AppCompatActivity() {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_IMAGE_CAPTURE_1 = 1
         private const val REQUEST_IMAGE_CAPTURE_2 = 2
-        private const val OPENAI_API_KEY = ""
+        private const val OPENAI_API_KEY = "Enter Your API key"
         private const val MODEL_PATH = "best_float32.tflite"
         private const val IMAGE_SIZE = 640
     }

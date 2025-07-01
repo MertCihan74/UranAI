@@ -115,4 +115,108 @@
     <string name="zodiac_prompt">Please select your zodiac sign</string>
     <string name="city_prompt">Please select your city</string>
     <string name="marital_status_prompt">Please select your marital status</string>
+    <string name="privacy_policy_text">
+# Privacy Policy for Coffee Fortune Telling
+
+Last Updated: 20.05.2025
+
+## Introduction
+Welcome to Coffee Fortune Telling. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, process, and safeguard your information when you use our mobile application.
+
+## Data We Collect
+We collect the following information during registration:
+- Name and surname
+- Gender
+- Birth date
+- Zodiac sign
+- City of residence
+- Occupation
+- Marital status
+- Username and password
+
+## How We Use Your Data
+The information we collect is used to:
+- Create and manage your account
+- Generate personalized fortune readings through GPT API
+- Improve our services
+- Communicate with you about our services
+
+## Data Sharing and Third-Party Services
+We use OpenAI\'s GPT API to generate your fortune readings. When you use our service:
+- Your registration information is sent to the GPT API
+- The transmission is encrypted, but please note that no method of internet transmission is 100% secure
+- We do not sell your personal data to third parties
+
+## Data Storage and Security
+- Your personal information is stored securely
+- We implement appropriate technical measures to protect your data
+- We retain your data only for as long as necessary to provide our services
+
+## Your Rights
+You have the right to:
+- Access your personal data
+- Correct inaccurate data
+- Delete your data
+- Withdraw consent at any time
+- Object to processing of your data
+
+## Children\'s Privacy
+Our service is not intended for children under 13. We do not knowingly collect data from children under 13.
+
+## Changes to This Privacy Policy
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
+
+## Contact Us
+If you have any questions about this Privacy Policy, please contact us at:
+mcbayir74@gmail.com
+    </string>
+
+    <string name="terms_of_service_text">
+# Terms of Service for Coffee Fortune Telling
+
+Last Updated: 20.05.2025
+
+## Agreement to Terms
+By accessing or using Coffee Fortune Telling, you agree to be bound by these Terms of Service and our Privacy Policy.
+
+## Description of Service
+Coffee Fortune Telling is a mobile application that provides personalized fortune readings generated through OpenAI\'s GPT API based on information you provide during registration.
+
+## User Accounts
+- You must register to use our service
+- You are responsible for maintaining the confidentiality of your account
+- You agree to provide accurate and complete information
+- You are responsible for all activities that occur under your account
+
+## User Conduct
+You agree not to:
+- Use the service for any illegal purpose
+- Attempt to gain unauthorized access to our systems
+- Interfere with or disrupt the service
+- Submit false or misleading information
+
+## Intellectual Property
+All content, features, and functionality of our app are the exclusive property of Coffee Fortune Telling and are protected by copyright, trademark, and other intellectual property laws.
+
+## Disclaimer
+- Our fortune readings are for entertainment purposes only
+- We do not guarantee accuracy or specific outcomes
+- We are not responsible for decisions made based on readings
+
+## Limitation of Liability
+To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.
+
+## Termination
+We may terminate or suspend your account without prior notice if you violate these Terms.
+
+## Changes to Terms
+We reserve the right to modify these Terms at any time. Your continued use of the service after such modifications constitutes your acceptance of the new Terms.
+
+## Governing Law
+These Terms shall be governed by the laws of Turkey, without regard to its conflict of law provisions.
+
+## Contact Us
+If you have any questions about these Terms, please contact us at:
+mcbayir74@gmail.com
+    </string>
 </resources>

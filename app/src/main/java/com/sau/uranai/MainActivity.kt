@@ -3,14 +3,11 @@ package com.sau.uranai
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -24,6 +21,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Force light theme
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -31,36 +30,48 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         auth = FirebaseAuth.getInstance()
 
         if (auth.currentUser == null) {
-            // Kullanıcı giriş yapmamışsa giriş ekranına yönlendir
+            // If user is not logged in, redirect to login screen
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
 
-        val profileButton = findViewById<ImageButton>(R.id.toolbar_profile)
-        profileButton.setOnClickListener {
-            openProfileActivity()
-        }
-
+        // Set up Toolbar and Navigation Drawer
         setSupportActionBar(binding.toolbar)
-        val toggle = ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbar, R.string.nav_open, R.string.nav_close)
+
+        // Set up Navigation Drawer Toggle
+        val toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.nav_open,
+            R.string.nav_close
+        )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+        // Set up Navigation Drawer Menu
+        binding.navigationDrawer.menu.clear() // Clear any existing items
+        binding.navigationDrawer.inflateMenu(R.menu.drawer_menu)
         binding.navigationDrawer.setNavigationItemSelectedListener(this)
+
+        // Set up Bottom Navigation
         binding.bottomNavigation.background = null
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_home -> openFragment(HomeFragment())
-                R.id.fab -> openFortuneActivity()
-                R.id.bottom_pastfortunes -> openFragment(PastFortunesFragment())
+                R.id.nav_profile -> openProfileActivity()
             }
             true
         }
 
+        // Set up initial fragment
         fragmentManager = supportFragmentManager
-        openFragment(HomeFragment())
+        if (savedInstanceState == null) {
+            openFragment(HomeFragment())
+        }
 
+        // FAB Click Listener
         binding.fab.setOnClickListener {
             Toast.makeText(this, "Take photo for Fortune", Toast.LENGTH_SHORT).show()
             openFortuneActivity()
@@ -68,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
+        // Close drawer on back press if it's open
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
@@ -76,11 +88,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation drawer item clicks
         when (item.itemId) {
-            R.id.nav_home -> openFragment(HomeFragment())
-            R.id.nav_fortune -> openFortuneActivity()
-            R.id.nav_pastfortunes -> openFragment(PastFortunesFragment())
+            R.id.nav_home -> {
+                openFragment(HomeFragment())
+                binding.bottomNavigation.selectedItemId = R.id.bottom_home
+            }
+            R.id.nav_fortune -> {
+                openFortuneActivity()
+            }
+            R.id.nav_profile -> {
+                openProfileActivity()
+                binding.bottomNavigation.selectedItemId = R.id.nav_profile
+            }
+
         }
+
+        // Close the drawer after item selection
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }

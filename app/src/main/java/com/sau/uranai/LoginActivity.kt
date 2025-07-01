@@ -28,20 +28,20 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Lütfen kullanıcı adı ve şifreyi girin.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter username and password.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             auth.signInWithEmailAndPassword("$username@example.com", password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Giriş başarılı, ana ekrana yönlendir
+                        // Login successful, redirect to main screen
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        // Giriş başarısız, hata mesajı göster
-                        Toast.makeText(this, "Giriş başarısız. Hata: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        // Login failed, show error message
+                        Toast.makeText(this, "Login failed. Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
